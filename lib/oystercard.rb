@@ -28,6 +28,7 @@ def in_journey?
 end
 
 def touch_out
+  @balance -= MIN_BALANCE
   @in_use = false
 end
 

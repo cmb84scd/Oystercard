@@ -48,4 +48,9 @@ describe Oystercard do
     specify { expect(subject.touch_out).not_to be_truthy }
   end
 
+  it 'deducts money from card' do
+    min_balance = Oystercard::MIN_BALANCE
+    expect {subject.touch_out }.to change{ subject.balance }.by -min_balance
+  end
+
 end
