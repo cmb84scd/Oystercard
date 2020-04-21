@@ -19,22 +19,23 @@ describe Oystercard do
     before(:all) do
       subject.top_up(Oystercard::MAX_BALANCE)
 
-      it 'lets you deduct from card' do
-        expect{ subject.deduct 1 }.to change{ subject.balance }.by -1
-      end
-
       describe 'lets you touch in' do
         specify { expect(subject.touch_in).to be_truthy }
+      end
+
+      it 'deducts money from card' do
+        min_charge = Oystercard::MIN_CHARGE
+        expect {subject.touch_out }.to change{ subject.balance }.by -min_charge
       end
     end
   end
 
   context 'it has low or no balance' do
     before(:all) do
-      subject.top_up(Oystercard::MIN_BALANCE)
+      subject.top_up(Oystercard::MIN_CHARGE)
 
       it 'throws an error if isufficient funds' do
-        min_balance = Oystercard::MIN_BALANCE
+        min_charge = Oystercard::MIN_CHARGE
         expect{ subject.touch_in }.to raise_error("Insufficient funds")
       end
     end
@@ -46,11 +47,6 @@ describe Oystercard do
 
   describe 'lets you touch out' do
     specify { expect(subject.touch_out).not_to be_truthy }
-  end
-
-  it 'deducts money from card' do
-    min_balance = Oystercard::MIN_BALANCE
-    expect {subject.touch_out }.to change{ subject.balance }.by -min_balance
   end
 
 end
